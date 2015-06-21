@@ -1,0 +1,317 @@
+<include file='header_one' />
+		<!-- page specific plugin styles -->
+        <include file='header_two' />
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								控制台
+							</li>
+							<li class="">采集方案设置</li>
+							<li class="active">关键词采集</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+                                <div class="tabbable">
+                                    <ul class="nav nav-tabs" id="myTab">
+                                        <li class="active">
+                                            <a data-toggle="tab" href="#home">
+                                                <i class="green icon-list bigger-110"></i>
+                                                方案列表
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a data-toggle="tab" href="#profile">
+                                            <i class="pink icon-plus bigger-110"></i>
+                                                添加方案
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div id="home" class="tab-pane in active">
+                                            <div class="table-responsive">
+                                                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>关键词</th>
+                                                            <th>内容来源</th>
+                                                            <th>单次采集量</th>
+                                                            <th>图片本地化</th>
+                                                            <th>发布时间</th>
+                                                            <th>操作</th>
+                                                        </tr>
+                                                    </thead>
+            
+                                                    <tbody>
+                                                    <volist name='schemelist' id='data'>
+                                                        <tr>
+                                                            <td>{$data['id']}</td>
+                                                            <td>{$data['keyword']}</td>
+                                                            <td>
+                                                            {$sourcefrom[$data['sourcefrom']]['name']}
+                                                            </td>
+                                                            <td>{$data['oncenum']}</td>
+                                                            <td><php>if($data['downimg']){</php>是<php>}else{</php>否<php>}</php></td>
+                                                            <td>{$data['ctime']|date="Y-m-d H:i:s",###}</td>
+                                                            <td><div class="action-buttons">
+                                                            <a class="blue" href="{:U('crawl/getListByKeyword',array('scheme'=>$data['id']))}">
+                                                            	<i class="icon-cloud-download"></i>
+                                                                开始采集
+                                                            </a>
+                                                            
+                                                            <a class="green" href="{:U('crawl/editScheme',array('id'=>$data['id']))}">
+                                                                <i class="icon-pencil bigger-130"></i>
+                                                            </a>
+                                                            <a class="red" onclick="return confirm('删除后不可恢复，确定删除？')" href="{:U('crawl/delScheme',array('id'=>$data['id']))}">
+                                                                <i class="icon-trash bigger-130"></i>
+                                                            </a>
+                                                            </div></td>
+                                                        </tr>
+                                                    </volist>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                			<ul class="pagination">{$page}</ul>
+                                        </div>
+
+                                        <div id="profile" class="tab-pane">
+                                            <form class="form-horizontal" role="form" id="validation-form" action="{:U('crawl/goAddScheme')}" method="post" >
+                                            <input type="hidden" name="type" value="keyword">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="keyword"> 关键词* </label>
+        
+                                                <div class="col-sm-9">
+                                                   <input type="text" id="keyword" name="keyword" placeholder="请填写您要采集的关键词" class="col-xs-12 limited" maxlength="60" />
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="oncenum"> 单次采集量（默认100条）* </label>
+        
+                                                <div class="col-sm-9">
+                                                   <input type="text" id="oncenum" name="oncenum" value="100" placeholder="请填写单次采集的文章数量，默认100" class="col-xs-12"/>
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="sourcefrom"> 文章来源* </label>
+        
+                                                <div class="col-sm-9">
+                                                   <div class="radio" style="padding-left:0">
+                                                   <volist name='sourcefrom' id='data'>
+                                                        <label>
+                                                            <input name="sourcefrom" type="radio" <php>if($i==1){</php>checked='checked'<php>}</php> value="{$key}" class="ace">
+                                                            <span class="lbl"> {$data['name']}</span>
+                                                        </label>&emsp;
+                                                    </volist>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="downimg"> 图片本地化* </label>
+        
+                                                <div class="col-sm-9">
+                                                   <div class="radio" style="padding-left:0">
+                                                        <label>
+                                                            <input name="downimg" type="radio" value="1" checked="checked" class="ace">
+                                                            <span class="lbl"> 是</span>
+                                                        </label>&emsp;&emsp;
+                                                        <label>
+                                                            <input name="downimg" type="radio" value="0" class="ace">
+                                                            <span class="lbl"> 否</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix form-actions">
+                                            <div class="col-md-offset-3 col-md-9">
+                                                <button class="btn btn-info" id="submit" type="submit">
+                                                    <i class="icon-ok bigger-110"></i>
+                                                    立即提交
+                                                </button>
+        
+                                                &nbsp; &nbsp; &nbsp;
+                                                <button class="btn" type="reset">
+                                                    <i class="icon-undo bigger-110"></i>
+                                                    重置
+                                                </button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+				<div class="ace-settings-container" id="ace-settings-container">
+					<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+						<i class="icon-cog bigger-150"></i>
+					</div>
+
+					<div class="ace-settings-box" id="ace-settings-box">
+						<div>
+							<div class="pull-left">
+								<select id="skin-colorpicker" class="hide">
+									<option data-skin="default" value="#438EB9">#438EB9</option>
+									<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+									<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+									<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+								</select>
+							</div>
+							<span>&nbsp; 选择皮肤</span>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+							<label class="lbl" for="ace-settings-navbar"> Fixed Navbar</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+							<label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+							<label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+							<label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+							<label class="lbl" for="ace-settings-add-container">
+								Inside
+								<b>.container</b>
+							</label>
+						</div>
+					</div>
+				</div><!-- /#ace-settings-container -->
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script src="{:SOURCE_PATH}assets/js/jquery-2.0.3.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="{:SOURCE_PATH}assets/js/jquery-1.10.2.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='{:SOURCE_PATH}assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='{:SOURCE_PATH}assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='{:SOURCE_PATH}assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="{:SOURCE_PATH}assets/js/bootstrap.min.js"></script>
+		<script src="{:SOURCE_PATH}assets/js/typeahead-bs2.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+        <script src="{:SOURCE_PATH}assets/js/jquery.validate.min.js"></script>
+		<script src="{:SOURCE_PATH}assets/js/jquery.inputlimiter.1.3.1.min.js"></script>
+
+		<!-- ace scripts -->
+
+		<script src="{:SOURCE_PATH}assets/js/ace-elements.min.js"></script>
+		<script src="{:SOURCE_PATH}assets/js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
+        <script type="text/javascript">
+			jQuery(function($) {
+				$('textarea.limited,input.limited').inputlimiter({
+					remText: '还可以输入%n 个字符',
+					limitText: '最多允许: %n个字符.'
+				});
+				$('#thumb').ace_file_input({
+					no_file:'未选择 ...(建议尺寸：300*150)',
+					btn_choose:'选择',
+					btn_change:'更改',
+					droppable:false,
+					onchange:null,
+					thumbnail:false //| true | large
+					//whitelist:'gif|png|jpg|jpeg'
+					//blacklist:'exe|php'
+					//onchange:''
+					//
+				});
+				
+				$('#validation-form').validate({
+					errorElement: 'div',
+					errorClass: 'help-block',
+					focusInvalid: false,
+					rules: {
+						keyword:{required:true},
+						sourcefrom:{required: true}
+					},
+			
+					messages: {
+						keyword: "*关键字不能为空！",
+						sourcefrom: "*文章来源至少选择一个！"
+					},
+			
+					invalidHandler: function (event, validator) { //display error alert on form submit   
+						$('.alert-danger', $('.login-form')).show();
+					},
+			
+					highlight: function (e) {
+						$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+					},
+			
+					success: function (e) {
+						$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+						$(e).remove();
+					},
+			
+					errorPlacement: function (error, element) {
+						if(element.is('.select2')) {
+							error.insertAfter(element);
+						}else error.insertAfter(element);
+					},
+			
+					submitHandler: function (form) {
+						form.submit();
+					}
+				});
+			
+			});
+		</script>
+		<include file='footer' />

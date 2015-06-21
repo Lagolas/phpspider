@@ -1,0 +1,278 @@
+<include file='header_one' />
+		<!-- page specific plugin styles -->
+        <include file='header_two' />
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								控制台
+							</li>
+							<li class="active">按关键字采集</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content" style="position:relative">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+                                <div class="table-responsive">
+											<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+												<thead>
+                                                	<tr>
+                                                    	<th class="center">
+                                                        	<label>
+																<input type="checkbox" class="ace">
+																<span class="lbl"></span>
+															</label>
+                                                        </th>
+                                                    	<th>标题</th>
+                                                    	<th>URL</th>
+                                                        <th style="min-width:80px">状态</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                	<volist name='result' id='data'>
+                                                    <tr>
+                                                    	<td class="center">
+                                                        	<label class="urlbox">
+																<input type="checkbox" name="url" value="{$data['url']}" class="ace">
+																<span class="lbl"></span>
+															</label>
+                                                        </td>
+                                                        <td><a href="{$data['url']}" target="_blank">{$data['title']}</a></td>
+                                                        <td>{$data['url']}</td>
+                                                        <td url="{$data['url']}">未入库</td>
+                                                    </tr>
+                                                    </volist>
+                                                </tbody>
+											</table>
+										</div>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+                            <div class="col-xs-12">
+                                <div class="progress progress-striped active" id="data-percent" data-percent="0%">
+                                    <div class="progress-bar progress-bar-success" id="progress" style="width: 0%;"></div>
+                                </div>
+                                <button type="button" class="btn btn-success checkall"><i class="icon-check"></i>全选</button>
+                                <button type="button" class="btn btn-warning checkother"><i class="icon-exchange"></i>反选</button>
+                                <select id="category" name="category">
+                                    <option value="">请选择栏目</option>
+                                    <volist name='category' id='data'>
+                                    <option value="{$data['sort_id']}">{$data['sort_name']}</option>
+                                    </volist>
+                                </select>
+                                <button type="button" class="btn btn-info" id="crawl_content"><i class=" icon-cloud-download"></i>内容入库</button>
+                                <button type="button" class="btn btn-danger stop_crawl "><i class="icon-ban-circle"></i>停止采集列表</button>
+                            </div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+				<div class="ace-settings-container" id="ace-settings-container">
+					<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+						<i class="icon-cog bigger-150"></i>
+					</div>
+
+					<div class="ace-settings-box" id="ace-settings-box">
+						<div>
+							<div class="pull-left">
+								<select id="skin-colorpicker" class="hide">
+									<option data-skin="default" value="#438EB9">#438EB9</option>
+									<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+									<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+									<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+								</select>
+							</div>
+							<span>&nbsp; 选择皮肤</span>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+							<label class="lbl" for="ace-settings-navbar"> Fixed Navbar</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+							<label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+							<label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+							<label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+							<label class="lbl" for="ace-settings-add-container">
+								Inside
+								<b>.container</b>
+							</label>
+						</div>
+					</div>
+				</div><!-- /#ace-settings-container -->
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse" style="z-index:14">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script src="{:SOURCE_PATH}assets/js/jquery-2.0.3.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="{:SOURCE_PATH}assets/js/jquery-1.10.2.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='{:SOURCE_PATH}assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='{:SOURCE_PATH}assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='{:SOURCE_PATH}assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="{:SOURCE_PATH}assets/js/bootstrap.min.js"></script>
+		<script src="{:SOURCE_PATH}assets/js/typeahead-bs2.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!-- ace scripts -->
+
+		<script src="{:SOURCE_PATH}assets/js/ace-elements.min.js"></script>
+		<script src="{:SOURCE_PATH}assets/js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
+        <script>
+		$(function(){
+			stop_crawl = 0;
+			obj = $("#crawl_content");
+			var scheme = {$schemeid};
+			var hid = {$hid};
+			<php>if($go_on){</php>
+				ajaxGet(scheme,hid,2);
+			<php>}</php>
+		})
+		
+		function ajaxGet(scheme,hid,p){
+			$.get("{:U('crawl/ajaxGetListBykeyword')}",{scheme:scheme,hid:hid,page:p},function(json){
+				go_on = json.go_on;
+				p = json.page;
+				var html = "";
+				result = json.result;
+				if(result){
+					for(i=0;i<result.length;i++){
+						var d = result[i];
+						html += '<tr><td class="center"><label class="urlbox"><input type="checkbox" name="url" value="'+d.url+'" class="ace"><span class="lbl"></span></label></td><td><a href="';
+						html += d.url;
+						html += '" target="_blank">';
+						html += d.title;
+						html += '</a></td><td>';
+						html += d.url;
+						html += '</td><td url="'+d.url+'">未入库</td></tr>';
+					}
+					$("#sample-table-1 tr:last").after(html);
+				}
+				if(parseInt(go_on)==1){
+					if(stop_crawl){
+						obj.removeClass('disabled');
+						obj.html('<i class=" icon-cloud-download"></i>内容入库');
+						return false;
+					}
+					ajaxGet(scheme,hid,p);
+					obj.addClass('disabled');
+					obj.html('<i class="icon-spinner icon-spin orange bigger-125"></i>列表采集中...');
+				}else{
+					if(json.alertinfo){
+						alert(json.alertinfo);
+					}
+					obj.removeClass('disabled');
+					obj.html('<i class=" icon-cloud-download"></i>内容入库');
+				}
+			});
+		}
+        </script>
+        <script>
+        $(function(){
+			$(".checkall").click(function(){
+				$(".urlbox").children('input').prop('checked','checked');
+			});
+			$(".checkother").click(function(){
+				$(".urlbox").children('input').trigger('click');
+			});
+			$(".stop_crawl").click(function(){
+				stop_crawl = 1;
+			});
+			obj.click(function(){
+				$(this).addClass('disabled');
+				$(this).html('<i class="icon-spinner icon-spin orange bigger-125"></i>内容入库中...');
+				var i=0;
+				total = $(".urlbox input:checked").length;
+				if(total==0){
+					alert('请勾选要采集的文章');
+					obj.removeClass('disabled');
+					obj.html('<i class=" icon-cloud-download"></i>内容入库');
+					return false;
+				}
+				var urls = new Array();
+				$(".urlbox input:checked").each(function(){
+					urls[i] = $(this).val();
+					i = i+1;
+				});
+				crawlcontent(urls)
+			});
+		})
+		function crawlcontent(urls,j){
+			j = j>0?j:0;
+			var category = $("#category").val();
+			schemeid = {$schemeid};
+			sourcefrom = "{$sourcefrom}";
+			$.post("{:U('crawl/crawlcontent')}",{category:category,scheme:schemeid,sf:sourcefrom,url:urls[j]},function(json){
+				if(json.alertinfo){
+					alert(json.alertinfo);
+					obj.removeClass('disabled');
+					obj.html('<i class=" icon-cloud-download"></i>内容入库');
+				}else{
+					$('td[url="'+json.url+'"]').html(json.info);
+					j = j+1;
+					width = j/total*100+"%";
+					data_percent = Math.ceil(j/total*100)+"%";
+					$('#progress').css({width:width});
+					$('#data-percent').attr('data-percent',data_percent);
+					if(j<total){
+						crawlcontent(urls,j);
+					}
+					if(j==total){
+						obj.removeClass('disabled');
+						obj.html('<i class=" icon-cloud-download"></i>内容入库');
+						j==0;
+					}
+				}
+			});
+		}
+        </script>
+		<include file='footer' />
