@@ -63,7 +63,7 @@
                                 <select id="category" name="category">
                                     <option value="">请选择栏目</option>
                                     <volist name='category' id='data'>
-                                    <option value="{$data['sort_id']}">{$data['sort_name']}</option>
+                                    <option value="{$data['catid']}">{$data['catname']}</option>
                                     </volist>
                                 </select>
                                 <button type="button" class="btn btn-info" id="crawl_content"><i class=" icon-cloud-download"></i>内容入库</button>
