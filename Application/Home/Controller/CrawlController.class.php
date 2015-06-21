@@ -69,13 +69,13 @@ class CrawlController extends InitController{
                 $history['scheme'] = $scheme['id'];
                 $history['num'] = count($result['data']);
                 $hid = M('history')->add($history);
-                /*
-                $where_sort['type'] = 2;
-                $where_sort['state'] = 1;
-                $category = M('sort')->where($where_sort)->select();
+                //目标站栏目 start
+                $where_sort['type'] = 0;
+                $where_sort['modelid'] = 1;
+                $where_sort['child'] = 0;
+                $category = M('category',$this->targetPre,$this->targetDB)->where($where_sort)->select();
                 $this->assign('category',$category);
-                 * 
-                 */
+                //目标站栏目 end
                 $this->assign('hid',$hid);
                 $this->assign('result',$result['data']);
                 $this->assign('go_on',$result['go_on']);
@@ -273,25 +273,40 @@ class CrawlController extends InitController{
                $description = $obj->find('meta[name=description]');
                $content = $obj->find($sf[$current_sf]['content']);
                if($title){
-                   $detail['title'] = $title[0]->getPlainText();
+                   $news['title'] = $title[0]->getPlainText();
                }
                if($keywords){
-                   $detail['seo_keywords'] = $description[0]->getAttr('content');
+                   $news['keywords'] = $description[0]->getAttr('content');
                }
                if($description){
-                   $detail['description'] = $description[0]->getAttr('content');
+                   $news['description'] = $description[0]->getAttr('content');
                }
                if($content){
-                   $detail['content'] = "";
+                   $newsdata['content'] = "";
                    foreach ($content as $k=>$v){
-                       $detail['content'] .= preg_replace('/href=[\'\"]?[:\/\w#\.]*[\'\"]?/i', '', $v->outerHtml());
+                       $p = "<p>";
+                       $p .= preg_replace('/href=[\'\"]?[:\/\w#\.]*[\'\"]?/i',$this->targetHost, $v->innerHtml());
+                       $p = preg_replace('/腾讯娱乐/',$this->targetSiteNameNoa, $p);
+                       $p .= "</p>";
+                       $newsdata['content'] .= $p;
                    }
                }
             }catch(Exception $e){}
-            //$detail['source'] = $current_sf;
-            if($detail['content']){
+            if($newsdata['content']){
+                $targetNews_obj = M($this->targetNews,$this->targetPre,$this->targetDB);
                 //此处根据前台提交的category(栏目ID)，将内容发布到指定的栏目
-                if(M('crawl_content')->add($detail)){
+                $news['catid'] = $sort_id;
+                $news['status'] = 99;
+                $news['username'] = "spider";
+                $news['inputtime'] = $news['updatetime'] = NOW_TIME;
+                $newsId = $targetNews_obj->add($news);
+                if($newsId){
+                    $newsdata['id'] = $newsId;
+                    $newsdata['copyfrom'] = "|0";
+                    M($this->targetNewsData,$this->targetPre,$this->targetDB)->add($newsdata);
+                    $newsurl['url'] = $this->targetHost."/index.php?m=content&c=index&a=show&catid=".$sort_id."&id=".$newsId;
+                    $where_url['id'] = $newsId;
+                    $targetNews_obj->where($where_url)->save($newsurl);
                     $history['link'] = md5($url);
                     $history['scheme'] = I('post.scheme');
                     M('history_list')->add($history);
