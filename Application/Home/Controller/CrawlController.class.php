@@ -4,6 +4,7 @@ use Common\Controller\InitController;
 class CrawlController extends InitController{
     public function __construct() {
         parent::__construct();
+        $this->isLogin();
     }
     
     public function index(){
@@ -285,7 +286,7 @@ class CrawlController extends InitController{
                    $newsdata['content'] = "";
                    foreach ($content as $k=>$v){
                        $p = "<p>";
-                       $p .= preg_replace('/href=[\'\"]?[:\/\w#\.]*[\'\"]?/i',$this->targetHost, $v->innerHtml());
+                       $p .= preg_replace('/href=[\'\"]?[:\/\w#\.]*[\'\"]?/i','href="'.$this->targetHost.'"', $v->innerHtml());
                        $p = preg_replace('/腾讯娱乐/',$this->targetSiteNameNoa, $p);
                        $p .= "</p>";
                        $newsdata['content'] .= $p;
@@ -298,13 +299,14 @@ class CrawlController extends InitController{
                 $news['catid'] = $sort_id;
                 $news['status'] = 99;
                 $news['username'] = "spider";
+                $news['thumb'] = $this->targetHost."/statics/images/nopic.png";
                 $news['inputtime'] = $news['updatetime'] = NOW_TIME;
                 $newsId = $targetNews_obj->add($news);
                 if($newsId){
                     $newsdata['id'] = $newsId;
-                    $newsdata['copyfrom'] = "|0";
+                    $newsdata['copyfrom'] = "|3";
                     M($this->targetNewsData,$this->targetPre,$this->targetDB)->add($newsdata);
-                    $newsurl['url'] = $this->targetHost."/index.php?m=content&c=index&a=show&catid=".$sort_id."&id=".$newsId;
+                    $newsurl['url'] = $this->targetHost."/show-".$sort_id."-".$newsId."-1.html";
                     $where_url['id'] = $newsId;
                     $targetNews_obj->where($where_url)->save($newsurl);
                     $history['link'] = md5($url);
