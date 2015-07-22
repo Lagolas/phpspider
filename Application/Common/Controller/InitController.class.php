@@ -2,6 +2,8 @@
 namespace Common\Controller;
 use Think\Controller;
 class InitController extends Controller{
+    protected $cookie_arr;
+    
     public function __construct() {
         parent::__construct();
         $this->init();
@@ -17,5 +19,15 @@ class InitController extends Controller{
         $this->targetHost = "http://pctest.cc";
         $this->targetSiteName = "<a href='http://guaguayule.com'>瓜瓜娱乐</a>";
         $this->targetSiteNameNoa = "瓜瓜娱乐";
+        $cookie = cookie('authcookie');
+        $this->cookie_arr = explode('-',authcode($cookie));
+    }
+    
+    protected function isLogin(){
+        if(!is_array($this->cookie_arr)){
+            cookie('authcookie',null);
+            $this->error('未登录',U('member/login'));
+            exit;
+        }
     }
 }
